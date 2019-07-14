@@ -2,4 +2,6 @@
     <string name="app_name">Zimad Test</string>
     <string name="tab_cat">cat</string>
     <string name="tab_dog">dog</string>
+
+    <string name="title_fragment">title</string>
 </resources>

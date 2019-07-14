@@ -3,6 +3,7 @@ package by.golda.zimadtest.fragments
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -17,37 +18,9 @@ import by.golda.zimadtest.viewmodels.PetViewModel
 
 class PetListFragment : Fragment() {
 
-    private lateinit var pageViewModel: PetViewModel
-    private lateinit var petType: String
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProviders.of(this).get(PetViewModel::class.java)
-        petType = arguments?.getString(ARG_PET_TYPE) ?: "cat"
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val root = inflater.inflate(R.layout.fragment_pets_list, container, false)
-
-        val recyclerView: RecyclerView = root.findViewById(R.id.rv_pets)
-
-        val layoutManager = LinearLayoutManager(context)
-        val decoretor = DividerItemDecoration(recyclerView.context, layoutManager.orientation)
-        recyclerView.addItemDecoration(decoretor)
-        recyclerView.layoutManager = layoutManager
-        val petAdapter = PetAdapter(context)
-        recyclerView.adapter = petAdapter
-        pageViewModel.getPet(petType).observe(this, Observer { petModel -> petModel?.let { petAdapter.setObject(it) } })
-
-        return root
-    }
-
     companion object {
         private const val ARG_PET_TYPE = "section_type"
+        private const val BUNDLE_RECYCLER_LAYOUT = "BUNDLE_RECYCLER_LAYOUT"
 
         @JvmStatic
         fun newInstance(sectionType: String): PetListFragment {
@@ -59,4 +32,56 @@ class PetListFragment : Fragment() {
         }
     }
 
+    private lateinit var pageViewModel: PetViewModel
+    private lateinit var petType: String
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var petAdapter: PetAdapter
+    private lateinit var layoutManager: LinearLayoutManager
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        pageViewModel = ViewModelProviders.of(this).get(PetViewModel::class.java)
+        petType = arguments?.getString(ARG_PET_TYPE) ?: ""
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val root = inflater.inflate(R.layout.fragment_pets_list, container, false)
+
+        recyclerView = root.findViewById(R.id.rv_pets)
+
+        layoutManager = LinearLayoutManager(context)
+        val decorator = DividerItemDecoration(recyclerView.context, layoutManager.orientation)
+        recyclerView.addItemDecoration(decorator)
+        recyclerView.layoutManager = layoutManager
+        petAdapter = PetAdapter(context)
+        recyclerView.adapter = petAdapter
+
+        pageViewModel.getPet(petType).observe(this, Observer { petModel -> petModel?.let {
+            petAdapter.setObject(it)
+            val state = savedInstanceState?.getParcelable<Parcelable>(BUNDLE_RECYCLER_LAYOUT)
+            layoutManager.onRestoreInstanceState(state)
+        } })
+
+        return root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val onSaveInstanceState = recyclerView.layoutManager?.onSaveInstanceState()
+        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, onSaveInstanceState)
+    }
+
+//    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+//        super.onViewStateRestored(savedInstanceState)
+//
+//        if (savedInstanceState != null) {
+//            val state = savedInstanceState.getParcelable<Parcelable>(BUNDLE_RECYCLER_LAYOUT)
+//            recyclerView.layoutManager?.onRestoreInstanceState(state)
+//        }
+//    }
 }

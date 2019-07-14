@@ -15,6 +15,8 @@ import com.squareup.picasso.Picasso
 class PetAdapter(private val context: Context?) : RecyclerView.Adapter<PetAdapter.ViewHolder>() {
 
     var list: MutableList<Data> = mutableListOf()
+    private var listener: onPetSelectedListener? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cat, parent, false)
@@ -25,6 +27,10 @@ class PetAdapter(private val context: Context?) : RecyclerView.Adapter<PetAdapte
         list.clear()
         list.addAll(cats.data)
         notifyDataSetChanged()
+    }
+
+    fun setListener(listener: onPetSelectedListener) {
+        this.listener =  listener
     }
 
     override fun getItemCount(): Int {
@@ -38,6 +44,8 @@ class PetAdapter(private val context: Context?) : RecyclerView.Adapter<PetAdapte
             .load(list[position].url)
             .error(R.drawable.ic_android)
             .into(holder.icon)
+
+        holder.view.setOnClickListener{ listener?.select(list[position].title, list[position].url) }
     }
 
 
@@ -45,8 +53,15 @@ class PetAdapter(private val context: Context?) : RecyclerView.Adapter<PetAdapte
         var text1 = view.findViewById(R.id.tv_text1) as TextView
         var text2 = view.findViewById(R.id.tv_text2) as TextView
         var icon = view.findViewById(R.id.iv_icon) as ImageView
+
+        var view = view
+
+
     }
 
+    interface onPetSelectedListener {
+        fun select(title: String, urlIcon: String)
+    }
 
 }
 

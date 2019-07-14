@@ -3,7 +3,7 @@ package by.golda.zimadtest.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CatModel(
+data class PetModel(
     @SerializedName("data")
     val `data`: List<Data>,
     @SerializedName("message")

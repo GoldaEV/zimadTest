@@ -1,4 +1,4 @@
-package by.golda.azsmapnext.network
+package by.golda.zimadtest.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ServiceRetrofit {
 
     companion object {
-        private val URL_SERVER = "http://kot3.com/xim/api.php"
+        private val URL_SERVER = "http://kot3.com"
 
         fun <S> createService(serviceClass: Class<S>): S {
 

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Zimad Test</string>
-    <string name="tab_text_1">cat</string>
-    <string name="tab_text_2">dog</string>
+    <string name="tab_cat">cat</string>
+    <string name="tab_dog">dog</string>
 </resources>

@@ -18,10 +18,10 @@ class PetProvider {
         val instance: PetProvider by lazy { PetProvider() }
     }
 
-    fun getCats(petString: String, status: MutableLiveData<Status>): LiveData<PetModel> {
+    fun getPat(petType: String, status: MutableLiveData<Status>): LiveData<PetModel> {
             status.postValue(Status.Loading)
 
-            ServiceRetrofit.createService(Api::class.java).getPet(petString).enqueue(object : Callback<PetModel> {
+            ServiceRetrofit.createService(Api::class.java).getPet(petType).enqueue(object : Callback<PetModel> {
                 override fun onFailure(call: Call<PetModel>, t: Throwable) {
                     status.postValue(Status.Failure)
                 }

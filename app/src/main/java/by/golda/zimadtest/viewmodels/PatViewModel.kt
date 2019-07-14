@@ -9,6 +9,6 @@ class PetViewModel: ViewModel() {
 
     var status: MutableLiveData<Status> = MutableLiveData()
 
-    fun getPet(petType: String) = PetProvider.instance.getCats(petType, status)
+    fun getPet(petType: String) = PetProvider.instance.getPat(petType, status)
 
 }

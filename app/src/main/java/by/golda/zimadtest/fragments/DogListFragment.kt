@@ -13,18 +13,18 @@ import android.view.View
 import android.view.ViewGroup
 import by.golda.zimadtest.R
 import by.golda.zimadtest.adapters.PetAdapter
-import by.golda.zimadtest.viewmodels.PetViewModel
+import by.golda.zimadtest.viewmodels.DogViewModel
 
 
-class PetListFragment : Fragment() {
+class DogListFragment : Fragment() {
 
     companion object {
-        private const val ARG_PET_TYPE = "section_type"
+        private const val ARG_PET_TYPE = "ARG_PET_TYPE"
         private const val BUNDLE_RECYCLER_LAYOUT = "BUNDLE_RECYCLER_LAYOUT"
 
         @JvmStatic
-        fun newInstance(sectionType: String): PetListFragment {
-            return PetListFragment().apply {
+        fun newInstance(sectionType: String): DogListFragment {
+            return DogListFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PET_TYPE, sectionType)
                 }
@@ -32,7 +32,7 @@ class PetListFragment : Fragment() {
         }
     }
 
-    private lateinit var pageViewModel: PetViewModel
+    private lateinit var pageViewModel: DogViewModel
     private lateinit var petType: String
 
     private lateinit var recyclerView: RecyclerView
@@ -42,7 +42,7 @@ class PetListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProviders.of(this).get(PetViewModel::class.java)
+        pageViewModel = ViewModelProviders.of(this).get(DogViewModel::class.java)
         petType = arguments?.getString(ARG_PET_TYPE) ?: ""
     }
 
@@ -76,12 +76,4 @@ class PetListFragment : Fragment() {
         outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, onSaveInstanceState)
     }
 
-//    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-//        super.onViewStateRestored(savedInstanceState)
-//
-//        if (savedInstanceState != null) {
-//            val state = savedInstanceState.getParcelable<Parcelable>(BUNDLE_RECYCLER_LAYOUT)
-//            recyclerView.layoutManager?.onRestoreInstanceState(state)
-//        }
-//    }
 }

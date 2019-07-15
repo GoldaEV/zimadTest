@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import by.golda.zimadtest.network.Status
 import by.golda.zimadtest.providers.PetProvider
 
-class CatViewModel: ViewModel() {
+class DogViewModel: ViewModel() {
 
     var status: MutableLiveData<Status> = MutableLiveData()
 

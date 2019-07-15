@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import by.golda.zimadtest.fragments.DogListFragment
 import by.golda.zimadtest.fragments.CatListFragment
+import by.golda.zimadtest.fragments.DetailFragment
+import by.golda.zimadtest.fragments.DogListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
+class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener, CatListFragment.OnCatListener,
+    DogListFragment.OnDogListener {
+
 
     private val TAB_TITLES = arrayOf(
         R.string.tab_cat,
@@ -26,8 +29,8 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
         for (item in TAB_TITLES) {
             tabs.addTab(tabs.newTab().setText(item))
         }
-        cats  = CatListFragment.newInstance(getString(TAB_TITLES[0]))
-        dogs  = DogListFragment.newInstance(getString(TAB_TITLES[1]))
+        cats = CatListFragment.newInstance(getString(TAB_TITLES[0]))
+        dogs = DogListFragment.newInstance(getString(TAB_TITLES[1]))
 
         tabs.addOnTabSelectedListener(this)
         replaceFragment(cats)
@@ -51,7 +54,22 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-
         supportFragmentManager.beginTransaction().replace(R.id.fragmContainer, fragment).commit()
     }
+
+    override fun onCatSelected(title: String, url: String) {
+        showDetail(title, url)
+    }
+
+    override fun onDogSelected(title: String, url: String) {
+        showDetail(title, url)
+    }
+
+    private fun showDetail(title: String, url: String) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmContainer, DetailFragment.newInstance(title, url))
+            .addToBackStack("detail")
+            .commit()
+    }
+
 }

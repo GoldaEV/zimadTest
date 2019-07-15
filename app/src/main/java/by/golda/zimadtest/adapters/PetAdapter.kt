@@ -45,7 +45,7 @@ class PetAdapter(private val context: Context?) : RecyclerView.Adapter<PetAdapte
             .error(R.drawable.ic_android)
             .into(holder.icon)
 
-        holder.view.setOnClickListener{ listener?.select(list[position].title, list[position].url) }
+        holder.itemView.setOnClickListener{ listener?.select(list[position].title, list[position].url) }
     }
 
 
@@ -53,10 +53,6 @@ class PetAdapter(private val context: Context?) : RecyclerView.Adapter<PetAdapte
         var text1 = view.findViewById(R.id.tv_text1) as TextView
         var text2 = view.findViewById(R.id.tv_text2) as TextView
         var icon = view.findViewById(R.id.iv_icon) as ImageView
-
-        var view = view
-
-
     }
 
     interface onPetSelectedListener {

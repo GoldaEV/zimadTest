@@ -2,6 +2,7 @@ package by.golda.zimadtest.fragments
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
@@ -38,6 +39,7 @@ class DogListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var petAdapter: PetAdapter
     private lateinit var layoutManager: LinearLayoutManager
+    private var listener: OnDogListener? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +61,11 @@ class DogListFragment : Fragment() {
         recyclerView.addItemDecoration(decorator)
         recyclerView.layoutManager = layoutManager
         petAdapter = PetAdapter(context)
+        petAdapter.setListener(object : PetAdapter.onPetSelectedListener {
+            override fun select(title: String, urlIcon: String) {
+                onSelectedPet(title, urlIcon)
+            }
+        })
         recyclerView.adapter = petAdapter
 
         pageViewModel.getPet(petType).observe(this, Observer { petModel -> petModel?.let {
@@ -74,6 +81,26 @@ class DogListFragment : Fragment() {
         super.onSaveInstanceState(outState)
         val onSaveInstanceState = recyclerView.layoutManager?.onSaveInstanceState()
         outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, onSaveInstanceState)
+    }
+
+    fun onSelectedPet(title: String, url: String) {
+        listener?.onDogSelected(title, url)
+    }
+
+    interface OnDogListener {
+        fun onDogSelected(title: String, url: String)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnDogListener) {
+            listener = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
 }
